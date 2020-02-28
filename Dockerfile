@@ -1,17 +1,37 @@
-FROM knipegp/docker-base
+FROM knipegp/docker-base:0.0.1
 
-RUN apt update
-RUN apt upgrade -y
-RUN apt install -y clangd-9
-RUN apt install -y clang-tools-9
-RUN apt install -y clang-tidy
-RUN apt install -y lldb
-RUN apt install -y gcc
-RUN apt install -y g++
-RUN apt install -y glibc-doc
-RUN apt install -y python3
-RUN apt install -y python3-pip
-Run apt install -y wget
+USER root
+WORKDIR /root
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    clangd-9=1:9-2~ubuntu18.04.2 \
+    clang-tools-9=1:9-2~ubuntu18.04.2 \
+    clang-tidy-9=1:9-2~ubuntu18.04.2 \
+    lldb-9=1:9-2~ubuntu18.04.2 \
+    gcc=4:7.4.0-1ubuntu2.3 \
+    libc6-dev=2.27-3ubuntu1 \
+    g++=4:7.4.0-1ubuntu2.3 \
+    gdb=8.1-0ubuntu3.2 \
+    libcc1-0=8.3.0-6ubuntu1~18.04.1 \
+    gdbserver=8.1-0ubuntu3.2 \
+    gdb-doc=8.1-0ubuntu3.2 \
+    glibc-doc=2.27-3ubuntu1 \
+    manpages-dev=4.15-1 \
+    python3=3.6.7-1~18.04 \
+    # TODO: Test if pip is necessary
+    python3-pip=9.0.1-2.3~ubuntu1.18.04.1 \
+    python3-dev=3.6.7-1~18.04 \
+    python3-setuptools=39.0.1-2 \
+    python3-wheel=0.30.0-0.2 \
+    python3-keyring=10.6.0-1 \
+    python3-keyrings.alt=3.0-1 \
+    python3-xdg=0.25-4ubuntu1 \
+    wget=1.19.4-1ubuntu2.2 \
+    valgrind=1:3.13.0-2ubuntu2.2 \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN ln -s /usr/bin/clang-tidy-9 /usr/bin/clang-tidy \
+    && ln -s /usr/bin/clang-check-9 /usr/bin/clang-check
 
 RUN wget https://github.com/oclint/oclint/releases/download/v0.13.1/oclint-0.13.1-x86_64-linux-4.4.0-112-generic.tar.gz && \
     tar -zxf oclint-0.13.1-x86_64-linux-4.4.0-112-generic.tar.gz && \
@@ -21,9 +41,12 @@ RUN wget https://github.com/oclint/oclint/releases/download/v0.13.1/oclint-0.13.
 USER developer
 WORKDIR /home/developer
 
-RUN pip3 install --user compiledb
-
 ENV PATH="~/.local/bin:${PATH}"
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
+RUN pip3 install --user compiledb==0.10.1
+RUN pip3 install --user gdbgui==0.13.2.0
 
 # Install YouCompleteMe
 # Add flags to end of command for particular language support
