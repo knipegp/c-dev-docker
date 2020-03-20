@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libc6-dev=2.27-3ubuntu1 \
     g++=4:7.4.0-1ubuntu2.3 \
     gdb=8.1-0ubuntu3.2 \
-    libcc1-0=8.3.0-6ubuntu1~18.04.1 \
+    libcc1-0=8.3.0-26ubuntu1~18.04 \
     gdbserver=8.1-0ubuntu3.2 \
     gdb-doc=8.1-0ubuntu3.2 \
     glibc-doc=2.27-3ubuntu1 \
@@ -28,6 +28,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-xdg=0.25-4ubuntu1 \
     wget=1.19.4-1ubuntu2.2 \
     valgrind=1:3.13.0-2ubuntu2.2 \
+    libarchive-zip-perl=1.60-1ubuntu0.1 \
     && rm -rf /var/lib/apt/lists/*
 
 RUN ln -s /usr/bin/clang-tidy-9 /usr/bin/clang-tidy \
