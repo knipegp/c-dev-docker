@@ -31,6 +31,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libarchive-zip-perl=1.60-1ubuntu0.1 \
     && rm -rf /var/lib/apt/lists/*
 
+# RR config
+RUN apt-get update && apt-get install -y ccache cmake make g++-multilib gdb \
+  pkg-config coreutils python3-pexpect manpages-dev git \
+  ninja-build capnproto libcapnp-dev
+RUN git clone https://github.com/mozilla/rr.git \
+    && mkdir obj && cd obj \
+    && cmake ../rr \
+    && make -j8 && make install
+##
+
 RUN ln -s /usr/bin/clang-tidy-9 /usr/bin/clang-tidy \
     && ln -s /usr/bin/clang-check-9 /usr/bin/clang-check
 
